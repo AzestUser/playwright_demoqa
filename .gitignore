@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Pytest
+.pytest_cache/
+
+# Playwright
+playwright-report/
+test-results/
+*.zip
+
+# Project artifacts / local state
+auth_state.json
+report.html
+

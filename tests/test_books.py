@@ -4,20 +4,26 @@ from playwright.sync_api import Page
 """
 Тести для роботи з книгами в DemoQA Book Store.
 
-Важливо: ми НЕ логінімося тут вручну – тести вже стартують
-в авторизованому стані завдяки auth_state.json (див. conftest.py).
+Кожен тест логінується самостійно перед тим, як почати роботу.
 """
 
-# Увесь модуль test_books використовує збережений auth-стан
-pytestmark = pytest.mark.auth
-
 # Page Objects
+from pages.login_page import LoginPage
 from pages.profile_page import ProfilePage
 from pages.book_store_page import BookStorePage
 from pages.book_details_page import BookDetailsPage
 
 # Назва книги, з якою працюватимемо у сценаріях
 BOOK_TITLE = "Git Pocket Guide"
+USERNAME = "Test_User"
+PASSWORD = "Test_User123!"
+
+
+def login_helper(page: Page) -> None:
+    """Допоміжна функція для логіну перед кожним тестом."""
+    login_page = LoginPage(page)
+    login_page.goto()
+    login_page.login(USERNAME, PASSWORD)
 
 
 def test_books_list_visible(page: Page) -> None:
@@ -25,10 +31,9 @@ def test_books_list_visible(page: Page) -> None:
     Перевіряємо, що на сторінці профілю відображається таблиця з книгами.
     Це базова перевірка, що ми успішно потрапили в особистий кабінет.
     """
+    login_helper(page)
+    
     profile = ProfilePage(page)
-
-    # Після використання auth_state.json ми вже залогінені,
-    # тому можемо одразу відкривати сторінку профілю.
     profile.goto()
     profile.wait_loaded()
 
@@ -39,6 +44,8 @@ def test_add_book_to_collection(page: Page) -> None:
     і додати її в свою колекцію. Потім перевірити, що книга
     з'явилась у списку на сторінці профілю.
     """
+    login_helper(page)
+    
     profile = ProfilePage(page)
     store = BookStorePage(page)
     details = BookDetailsPage(page)
@@ -64,6 +71,8 @@ def test_delete_all_books(page: Page) -> None:
     Сценарій: видалити всі книги з колекції користувача
     та переконатися, що таблиця стала порожньою.
     """
+    login_helper(page)
+    
     profile = ProfilePage(page)
     store = BookStorePage(page)
     details = BookDetailsPage(page)

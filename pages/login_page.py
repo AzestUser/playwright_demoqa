@@ -36,7 +36,9 @@ class LoginPage:
     def login(self, username: str, password: str) -> None:
         """
         Заповнює форму логіну валідними даними і натискає кнопку входу.
+        Чекає на редирект на сторінку профілю.
         """
         self.username_input.fill(username)
         self.password_input.fill(password)
         self.login_button.click()
+        self.page.wait_for_url("https://demoqa.com/profile")

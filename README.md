@@ -24,17 +24,20 @@ python -m venv venv
 .\\venv\\Scripts\\Activate.ps1
 pip install -r requirements.txt
 
+
 # Unix/Mac
 cd ~/path/to/playwright_demoqa
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+```
 
 ## Запуск тестів/ Tests Run
 ```bash
 pytest -q # Windows PowerShell
+```
 
 ## Запуск теста/ Particular test run
 ```bash
 pytest -q tests/test_radio_button.py --html=reports/report_radio_button.html --self-contained-html  # Windows PowerShell
-
+```

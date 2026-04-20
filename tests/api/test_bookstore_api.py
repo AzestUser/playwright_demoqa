@@ -3,17 +3,13 @@ from api.bookstore_client import BookStoreAPI
 
 
 @pytest.fixture(scope="session")
-def api_client():
-    from playwright.sync_api import sync_playwright
-    p_cm = sync_playwright()
-    p = p_cm.__enter__()  # start playwright and get Playwright instance
-    request_context = p.request.new_context()
+def api_client(playwright):
+    request_context = playwright.request.new_context()
     client = BookStoreAPI(request_context)
     client.generate_token()
     client.login_and_get_user_id()
     yield client
     request_context.dispose()
-    p_cm.__exit__(None, None, None)  # stop playwright
 
 
 @pytest.fixture(autouse=True)

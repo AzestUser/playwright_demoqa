@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DEMOQA_USERNAME: ${{ secrets.API_USERNAME }}
-      DEMOQA_PASSWORD: ${{ secrets.API_PASSWORD }}
+      API_USERNAME: ${{ secrets.API_USERNAME }}
+      API_PASSWORD: ${{ secrets.API_PASSWORD }}
     
     steps:
     - name: Checkout repository
@@ -33,7 +33,7 @@ jobs:
       run: playwright install --with-deps
 
     - name: Run Playwright tests
-      run: pytest -p pytest_playwright --self-contained-html
+      run: pytest --html=reports/report.html --self-contained-html
       
     - name: Upload Test Report
       if: always()

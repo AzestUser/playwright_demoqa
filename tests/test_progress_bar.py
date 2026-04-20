@@ -45,9 +45,11 @@ def test_reset_functionality(progress_page):
     # 2. Чекаємо, поки текст стане "100%"
     expect(progress_page.progress_bar).to_have_text("100%", timeout=20000)
     
-    # 3. ВИПРАВЛЕННЯ: Тепер кнопка має інший ID! 
-    # Замість start_stop_button використовуємо reset_button
+    # 3. Скидаємо — після reset прогрес автоматично стартує знову
     progress_page.reset_button.click()
     
-    # 4. Перевіряємо результат скидання
-    expect(progress_page.progress_bar).to_have_text("0%")
+    # 4. Одразу зупиняємо
+    progress_page.start_stop_button.click()
+    
+    # 5. Перевіряємо, що значення скинулось (менше 10%)
+    assert progress_page.get_progress_value() < 10

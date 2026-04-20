@@ -47,7 +47,9 @@ def test_prevent_propogation_greedy(droppable_page):
     
     # Перезавантажуємо сторінку для чистоти другого тесту на цій вкладці
     droppable_page.page.reload()
+    droppable_page.page.wait_for_timeout(500)
     droppable_page.tab_prevent.click()
+    droppable_page.page.wait_for_timeout(300)
     
     # Тягнемо у внутрішній "Жадібний" (Greedy) бокс
     # Має спрацювати ТІЛЬКИ внутрішній

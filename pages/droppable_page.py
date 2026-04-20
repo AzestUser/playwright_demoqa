@@ -43,6 +43,12 @@ class DroppablePage:
 
     def drag_by_coordinates(self, source, target_locator, offset_x=0, offset_y=0):
         """jQuery UI drag via mouse events"""
+        # Чекаємо поки jQuery UI ініціалізує цільовий елемент
+        target_locator.wait_for(state="visible")
+        self.page.wait_for_function(
+            "el => el.classList.contains('ui-droppable')",
+            arg=target_locator.element_handle(timeout=5000)
+        )
         source_box = source.bounding_box()
         target_box = target_locator.bounding_box()
         sx = source_box['x'] + source_box['width'] / 2

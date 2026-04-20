@@ -33,7 +33,7 @@ jobs:
       run: playwright install --with-deps
 
     - name: Run Playwright tests
-      run: pytest --self-contained-html
+      run: pytest -p pytest_playwright --self-contained-html
       
     - name: Upload Test Report
       if: always()

@@ -32,12 +32,12 @@ jobs:
       run: playwright install --with-deps
 
     - name: Run Playwright tests
-      run: pytest --html=report.html --self-contained-html
+      run: pytest --self-contained-html
       
     - name: Upload Test Report
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: playwright-report
-        path: report.html
+        path: reports/*.html
         retention-days: 30

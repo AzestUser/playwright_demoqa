@@ -43,14 +43,18 @@ def demoqa_credentials():
 
 
 @pytest.fixture(scope="session")
-def auth_api(playwright, demoqa_credentials):
-    request_context = playwright.request.new_context()
+def auth_api(demoqa_credentials):
+    from playwright.sync_api import sync_playwright
+    p_cm = sync_playwright()
+    p = p_cm.__enter__()
+    request_context = p.request.new_context()
     client = BookStoreAPI(request_context)
     username, password = demoqa_credentials
     client.username = username
     client.password = password
     yield client
     request_context.dispose()
+    p_cm.__exit__(None, None, None)
 
 def test_generate_token_success(auth_api, demoqa_credentials):
     username, password = demoqa_credentials

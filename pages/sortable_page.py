@@ -34,8 +34,7 @@ class SortablePage:
             sx = source_box['x'] + source_box['width'] / 2
             sy = source_box['y'] + source_box['height'] / 2
             tx = target_box['x'] + target_box['width'] / 2
-            # Тягнемо вище верхнього краю першого елемента
-            ty = target_box['y'] - 2
+            ty = target_box['y'] + 1
 
             self.page.mouse.move(sx, sy)
             self.page.mouse.down()

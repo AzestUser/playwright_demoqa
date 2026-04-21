@@ -15,12 +15,17 @@ class ToolTipsPage:
         self.tooltip = page.locator(".tooltip-inner")
 
     def hover_and_wait_tooltip(self, locator):
-        box = locator.bounding_box()
-        self.page.mouse.move(
-            box['x'] + box['width'] / 2,
-            box['y'] + box['height'] / 2
-        )
+        locator.dispatch_event("mouseenter")
+        locator.dispatch_event("mouseover")
         self.page.wait_for_selector(".tooltip-inner", state="visible", timeout=8000)
+
+    def hide_tooltip(self):
+        # Диспатчимо mouseleave на елемент з активним tooltip
+        self.page.evaluate("""
+            const el = document.querySelector('[data-original-title], [title][data-toggle="tooltip"]');
+            if (el) { $(el).tooltip('hide'); }
+        """)
+        self.page.wait_for_timeout(300)
 
     def navigate(self):
         self.page.goto(self.url, wait_until="load")

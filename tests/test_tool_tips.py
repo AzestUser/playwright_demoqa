@@ -21,19 +21,17 @@ def test_input_tooltip(tt_page):
 def test_links_tooltips(tt_page):
     tt_page.hover_and_wait_tooltip(tt_page.contrary_link)
     expect(tt_page.tooltip).to_have_text("You hovered over the Contrary")
-    
-    tt_page.page.locator("h1").hover()
-    expect(tt_page.tooltip).to_be_hidden()
-    
+
+    tt_page.hide_tooltip()
+
     tt_page.hover_and_wait_tooltip(tt_page.section_link)
     expect(tt_page.tooltip).to_have_text("You hovered over the 1.10.32")
-    
-    tt_page.page.locator("h1").hover()
-    expect(tt_page.tooltip).to_be_hidden()
+
+    tt_page.hide_tooltip()
 
 def test_tooltip_disappears(tt_page):
     tt_page.hover_and_wait_tooltip(tt_page.button)
     expect(tt_page.tooltip).to_be_visible()
-    
-    tt_page.page.locator("h1").hover()
+
+    tt_page.hide_tooltip()
     expect(tt_page.tooltip).to_be_hidden()

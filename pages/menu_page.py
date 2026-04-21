@@ -25,13 +25,12 @@ class MenuPage:
         """)
 
     def hover_chain(self, *locators):
-        """Плавно переводить мишу через ланцюжок елементів не виходячи з меню"""
-        for locator in locators:
+        """Відкриває підменю через JS і переходить по ланцюжку елементів"""
+        first, *rest = locators
+        # Додаємо клас hover на батьківський <li> щоб CSS :hover підменю стало видимим
+        first.evaluate("el => el.closest('li').classList.add('open', 'show')")
+        self.page.wait_for_timeout(300)
+        for locator in rest:
             locator.wait_for(state="visible", timeout=5000)
-            box = locator.bounding_box()
-            self.page.mouse.move(
-                box['x'] + box['width'] / 2,
-                box['y'] + box['height'] / 2,
-                steps=5
-            )
+            locator.evaluate("el => el.closest('li').classList.add('open', 'show')")
             self.page.wait_for_timeout(300)

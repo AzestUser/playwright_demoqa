@@ -32,12 +32,17 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Запуск тестів/ Tests Run
+## Запуск тестів локально/ Tests Run Locally
 ```bash
 pytest -q # Windows PowerShell
 ```
 
-## Запуск теста/ Particular test run
+## Запуск теста локально/ Particular test run Locally
 ```bash
 pytest -q tests/test_radio_button.py --html=reports/report_radio_button.html --self-contained-html  # Windows PowerShell
 ```
+
+## Запуск Тестів на Github/ Tests Run on GitHub
+Перейдіть в меню Actions/ Go to Actions Menu
+Оберіть пункт Playwright Tests в лівій панелі/ Select Playwright Tests in the left panel
+Натисніть Run Workflow/ Hit Run Workflow button 

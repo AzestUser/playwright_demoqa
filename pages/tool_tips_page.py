@@ -12,7 +12,7 @@ class ToolTipsPage:
         self.section_link = page.get_by_text("1.10.32", exact=False)
         
         # Сама підказка (з'являється динамічно)
-        self.tooltip = page.locator(".tooltip-inner >> visible=true")
+        self.tooltip = page.locator(".tooltip-inner")
 
     def navigate(self):
         self.page.goto(self.url, wait_until="load")

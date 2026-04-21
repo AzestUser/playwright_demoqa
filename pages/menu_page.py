@@ -11,7 +11,8 @@ class MenuPage:
         self.main_item_3 = page.get_by_role("link", name="Main Item 3")
         
         # Підпункти (з'являються при наведенні на Main Item 2)
-        self.sub_sub_list = page.get_by_role("link", name="SUB SUB LIST »")
+        self.sub_sub_list = page.locator("#nav > li:nth-child(2) > ul")
+        self.sub_sub_list_link = page.get_by_role("link", name="SUB SUB LIST »")
         
         # Глибокі підпункти (з'являються при наведенні на SUB SUB LIST)
         self.sub_sub_item_1 = page.get_by_role("link", name="Sub Sub Item 1")
@@ -25,12 +26,19 @@ class MenuPage:
         """)
 
     def hover_chain(self, *locators):
-        """Відкриває підменю через JS і переходить по ланцюжку елементів"""
-        first, *rest = locators
-        # Додаємо клас hover на батьківський <li> щоб CSS :hover підменю стало видимим
-        first.evaluate("el => el.closest('li').classList.add('open', 'show')")
-        self.page.wait_for_timeout(300)
-        for locator in rest:
-            locator.wait_for(state="visible", timeout=5000)
-            locator.evaluate("el => el.closest('li').classList.add('open', 'show')")
-            self.page.wait_for_timeout(300)
+        """Відкриває підменю через пряме змінення CSS display на вкладених <ul>"""
+        for locator in locators:
+            locator.evaluate("""
+                el => {
+                    const ul = el.nextElementSibling;
+                    if (ul && ul.tagName === 'UL') ul.style.display = 'block';
+                }
+            """)
+            self.page.wait_for_timeout(200)
+
+    def close_submenu(self):
+        """Закриває всі підменю через встановлення display:none"""
+        self.page.evaluate("""
+            document.querySelectorAll('#nav ul ul').forEach(ul => ul.style.display = 'none');
+        """)
+        self.page.wait_for_timeout(200)

@@ -34,11 +34,8 @@ class LoginPage:
         self.page.goto("https://demoqa.com/login")
 
     def login(self, username: str, password: str) -> None:
-        """
-        Заповнює форму логіну валідними даними і натискає кнопку входу.
-        Чекає на редирект на сторінку профілю.
-        """
         self.username_input.fill(username)
         self.password_input.fill(password)
         self.login_button.click()
-        self.page.wait_for_url("https://demoqa.com/profile")
+        # Чекаємо на кнопку Logout замість URL редиректу (демодати не завжди редиректує)
+        self.page.locator("#submit", has_text="Logout").wait_for(state="visible", timeout=15000)

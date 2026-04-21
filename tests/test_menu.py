@@ -17,19 +17,15 @@ def test_main_menu_items_visible(menu_page):
 def test_nested_menu_navigation(menu_page):
     """Перевірка відкриття підпунктів (Hover Chain)"""
 
-    menu_page.hover_chain(menu_page.main_item_2, menu_page.sub_sub_list)
+    menu_page.hover_chain(menu_page.main_item_2, menu_page.sub_sub_list_link)
     expect(menu_page.sub_sub_item_1).to_be_visible(timeout=8000)
     expect(menu_page.sub_sub_item_1).to_have_text("Sub Sub Item 1")
     expect(menu_page.sub_sub_item_2).to_be_visible()
 
 def test_menu_closes_on_leave(menu_page):
     """Перевірка, що меню ховається, якщо прибрати курсор"""
-    # Відкриваємо
-    menu_page.main_item_2.hover()
+    menu_page.hover_chain(menu_page.main_item_2)
     expect(menu_page.sub_sub_list).to_be_visible()
-    
-    # Відводимо мишу на Main Item 1 (де немає вкладеності)
-    menu_page.main_item_1.hover()
-    
-    # Підменю має зникнути
+
+    menu_page.close_submenu()
     expect(menu_page.sub_sub_list).to_be_hidden()

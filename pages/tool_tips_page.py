@@ -20,12 +20,10 @@ class ToolTipsPage:
         self.page.wait_for_selector(".tooltip-inner", state="visible", timeout=8000)
 
     def hide_tooltip(self):
-        # Диспатчимо mouseleave на елемент з активним tooltip
         self.page.evaluate("""
-            const el = document.querySelector('[data-original-title], [title][data-toggle="tooltip"]');
-            if (el) { $(el).tooltip('hide'); }
+            document.querySelectorAll('.tooltip').forEach(el => el.remove());
         """)
-        self.page.wait_for_timeout(300)
+        self.page.wait_for_timeout(200)
 
     def navigate(self):
         self.page.goto(self.url, wait_until="load")

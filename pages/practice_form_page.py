@@ -45,8 +45,7 @@ class PracticeFormPage:
         self.page.get_by_text(gender, exact=True).click()
 
     def select_hobby(self, hobby: str):
-        # Аналогічно радіокнопкам, клікаємо по тексту чекбокса
-        self.page.get_by_text(hobby, exact=True).click()
+        self.page.locator("#hobbiesWrapper").get_by_text(hobby, exact=True).click()
 
     def fill_date_of_birth(self, day: str, month: str, year: str):
         self.date_of_birth_input.click()
@@ -68,7 +67,7 @@ class PracticeFormPage:
     def fill_subjects(self, subjects: list):
         for subject in subjects:
             self.subjects_input.fill(subject)
-            self.page.keyboard.press("Enter")
+            self.page.locator(".subjects-auto-complete__option").first.click()
 
     def select_state_and_city(self, state: str, city: str):
         # React-Select на DemoQA не є стандартним селектом, тому взаємодіємо через клік + текст

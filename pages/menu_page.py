@@ -27,10 +27,11 @@ class MenuPage:
     def hover_chain(self, *locators):
         """Плавно переводить мишу через ланцюжок елементів не виходячи з меню"""
         for locator in locators:
+            locator.wait_for(state="visible", timeout=5000)
             box = locator.bounding_box()
             self.page.mouse.move(
                 box['x'] + box['width'] / 2,
                 box['y'] + box['height'] / 2,
                 steps=5
             )
-            self.page.wait_for_timeout(200)
+            self.page.wait_for_timeout(300)

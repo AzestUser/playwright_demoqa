@@ -15,8 +15,12 @@ class ToolTipsPage:
         self.tooltip = page.locator(".tooltip-inner")
 
     def hover_and_wait_tooltip(self, locator):
-        locator.hover()
-        self.page.wait_for_selector(".tooltip-inner", state="visible", timeout=5000)
+        box = locator.bounding_box()
+        self.page.mouse.move(
+            box['x'] + box['width'] / 2,
+            box['y'] + box['height'] / 2
+        )
+        self.page.wait_for_selector(".tooltip-inner", state="visible", timeout=8000)
 
     def navigate(self):
         self.page.goto(self.url, wait_until="load")

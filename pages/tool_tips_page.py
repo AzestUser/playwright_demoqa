@@ -14,6 +14,10 @@ class ToolTipsPage:
         # Сама підказка (з'являється динамічно)
         self.tooltip = page.locator(".tooltip-inner")
 
+    def hover_and_wait_tooltip(self, locator):
+        locator.hover()
+        self.page.wait_for_selector(".tooltip-inner", state="visible", timeout=5000)
+
     def navigate(self):
         self.page.goto(self.url, wait_until="load")
         # Видаляємо рекламу, щоб вона не перекривала елементи при наведенні

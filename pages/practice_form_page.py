@@ -34,40 +34,30 @@ class PracticeFormPage:
 
     def navigate(self):
         self.page.goto(self.url)
-        # Обов'язково видаляємо рекламу, інакше вона перекриє кнопку Submit
         self.page.evaluate("""
-            const ads = document.querySelectorAll('#adplus-anchor, #close-fixedban, footer, [id^="google_ads"]');
-            ads.forEach(el => el.remove());
+            document.querySelectorAll('#adplus-anchor, #close-fixedban, footer, #fixedban, [id^="google_ads"]').forEach(el => el.remove());
         """)
 
     def select_gender(self, gender: str):
-        # На DemoQA самі радіокнопки приховані, тому клікаємо по label через текст
-        self.page.get_by_text(gender, exact=True).click()
+        self.page.locator("#genterWrapper").get_by_text(gender, exact=True).click()
 
     def select_hobby(self, hobby: str):
         self.page.locator("#hobbiesWrapper").get_by_text(hobby, exact=True).click()
 
     def fill_date_of_birth(self, day: str, month: str, year: str):
         self.date_of_birth_input.click()
-    
-    # Вибираємо місяць та рік
         self.month_select.select_option(label=month)
         self.year_select.select_option(value=year)
-    
-    # Форматуємо день, щоб він завжди мав три цифри (наприклад, "15" -> "015", "5" -> "005")
-    # DemoQA використовує такий формат у класах: .react-datepicker__day--015
         formatted_day = day.zfill(3)
-    
-    # Використовуємо CSS :not() прямо в рядку локатора
-    # Це вибере день, який НЕ має класу --outside-month
         selector = f".react-datepicker__day--{formatted_day}:not(.react-datepicker__day--outside-month)"
-    
         self.page.locator(selector).click()
 
     def fill_subjects(self, subjects: list):
         for subject in subjects:
             self.subjects_input.fill(subject)
-            self.page.locator(".subjects-auto-complete__option").first.click()
+            option = self.page.locator("[class*='option']")
+            option.first.wait_for(state="visible")
+            option.first.click()
 
     def select_state_and_city(self, state: str, city: str):
         # React-Select на DemoQA не є стандартним селектом, тому взаємодіємо через клік + текст

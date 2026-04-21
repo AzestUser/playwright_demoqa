@@ -24,34 +24,32 @@ class SortablePage:
         """)
 
     def drag_and_drop_to_top(self, container_selector: str, item_text: str):
-        """
-        Бере елемент за текстом і тягне його на саму першу позицію контейнера.
-        """
         source = self.page.locator(container_selector).get_by_text(item_text, exact=True)
-        # Ціль — завжди перший елемент у поточному стані списку
         target = self.page.locator(container_selector).locator(".list-group-item").first
-        
-        # Отримуємо координати
+
         source_box = source.bounding_box()
         target_box = target.bounding_box()
 
         if source_box and target_box:
-            # 1. Наводимо на центр елемента, який хочемо перетягнути
-            self.page.mouse.move(source_box['x'] + source_box['width'] / 2, 
-                                 source_box['y'] + source_box['height'] / 2)
+            sx = source_box['x'] + source_box['width'] / 2
+            sy = source_box['y'] + source_box['height'] / 2
+            tx = target_box['x'] + target_box['width'] / 2
+            ty = target_box['y'] + 2
+
+            self.page.mouse.move(sx, sy)
             self.page.mouse.down()
-            
-            # 2. Тягнемо до верхньої частини цільового елемента
-            # Додаємо невеликий офсет (-5), щоб бути точно над ним
-            self.page.mouse.move(target_box['x'] + target_box['width'] / 2, 
-                                 target_box['y'] + 5, steps=10)
-            
-            # КРИТИЧНО: невелика пауза, щоб SortableJS побачив перекриття
+            self.page.wait_for_timeout(100)
+
+            # Поступово рухаємось до цілі через проміжну точку
+            mx = (sx + tx) / 2
+            my = (sy + ty) / 2
+            self.page.mouse.move(mx, my, steps=5)
+            self.page.wait_for_timeout(100)
+            self.page.mouse.move(tx, ty, steps=5)
             self.page.wait_for_timeout(300)
-            
+
             self.page.mouse.up()
-            # Чекаємо завершення анімації переміщення в DOM
-            self.page.wait_for_timeout(200)
+            self.page.wait_for_timeout(300)
 
     def get_items_text(self, items_locator: Locator):
         # Переконуємось, що ми отримуємо актуальні дані з DOM

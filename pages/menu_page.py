@@ -37,6 +37,6 @@ class MenuPage:
             self.page.wait_for_timeout(200)
 
     def close_submenu(self):
-        """Закриває всі підменю через hover на body (симулює прибирання курсору)"""
-        self.page.locator("body").hover()
+        """Закриває всі підменю через hover на інший елемент меню"""
+        self.main_item_1.hover()
         self.page.wait_for_timeout(200)

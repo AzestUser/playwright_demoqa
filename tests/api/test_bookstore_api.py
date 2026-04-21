@@ -1,10 +1,11 @@
+import json
 import pytest
 from api.bookstore_client import BookStoreAPI
 
 
 @pytest.fixture(scope="session")
 def api_client(playwright):
-    request_context = playwright.request.new_context()
+    request_context = playwright.request.new_context(timeout=60000)
     client = BookStoreAPI(request_context)
     client.generate_token()
     client.login_and_get_user_id()
@@ -42,8 +43,7 @@ def test_is_authorized(api_client):
 
 def test_is_authorized_wrong_password(playwright):
     # Перевіряє, що користувач з невірним паролем не авторизований
-    req = playwright.request.new_context()
-    import json
+    req = playwright.request.new_context(timeout=60000)
     resp = req.post(
         "https://demoqa.com/Account/v1/Authorized",
         data=json.dumps({"userName": "Test_User123!", "password": "WrongPass"}),
@@ -72,7 +72,7 @@ def test_get_user(api_client):
 
 def test_get_user_unauthorized(playwright):
     # Перевіряє, що запит без токена повертає 401
-    req = playwright.request.new_context()
+    req = playwright.request.new_context(timeout=60000)
     resp = req.get("https://demoqa.com/Account/v1/User/fake-id")
     assert resp.status == 401
     req.dispose()
@@ -123,8 +123,7 @@ def test_add_duplicate_book(api_client, all_isbns):
 
 def test_add_book_unauthorized(playwright, all_isbns):
     # Перевіряє, що додавання книги без токена повертає 401
-    req = playwright.request.new_context()
-    import json
+    req = playwright.request.new_context(timeout=60000)
     payload = {"userId": "fake", "collectionOfIsbns": [{"isbn": all_isbns[0]}]}
     resp = req.post(
         "https://demoqa.com/BookStore/v1/Books",
@@ -179,7 +178,7 @@ def test_delete_book_not_in_collection(api_client, all_isbns):
 
 def test_delete_books_unauthorized(playwright):
     # Перевіряє, що видалення книг без токена повертає 401
-    req = playwright.request.new_context()
+    req = playwright.request.new_context(timeout=60000)
     resp = req.delete("https://demoqa.com/BookStore/v1/Books?UserId=fake-id")
     assert resp.status == 401
     assert resp.json()["message"] == "User not authorized!"

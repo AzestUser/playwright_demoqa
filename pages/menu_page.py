@@ -37,8 +37,6 @@ class MenuPage:
             self.page.wait_for_timeout(200)
 
     def close_submenu(self):
-        """Закриває всі підменю через встановлення display:none"""
-        self.page.evaluate("""
-            document.querySelectorAll('#nav ul ul').forEach(ul => ul.style.display = 'none');
-        """)
+        """Закриває всі підменю через hover на body (симулює прибирання курсору)"""
+        self.page.locator("body").hover()
         self.page.wait_for_timeout(200)

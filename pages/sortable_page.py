@@ -34,22 +34,24 @@ class SortablePage:
             sx = source_box['x'] + source_box['width'] / 2
             sy = source_box['y'] + source_box['height'] / 2
             tx = target_box['x'] + target_box['width'] / 2
-            ty = target_box['y'] + 2
+            # Тягнемо вище верхнього краю першого елемента
+            ty = target_box['y'] - 2
 
             self.page.mouse.move(sx, sy)
             self.page.mouse.down()
-            self.page.wait_for_timeout(100)
+            self.page.wait_for_timeout(150)
 
-            # Поступово рухаємось до цілі через проміжну точку
-            mx = (sx + tx) / 2
-            my = (sy + ty) / 2
-            self.page.mouse.move(mx, my, steps=5)
-            self.page.wait_for_timeout(100)
-            self.page.mouse.move(tx, ty, steps=5)
-            self.page.wait_for_timeout(300)
+            steps = 20
+            for i in range(1, steps + 1):
+                self.page.mouse.move(
+                    sx + (tx - sx) * i / steps,
+                    sy + (ty - sy) * i / steps
+                )
+                self.page.wait_for_timeout(20)
 
+            self.page.wait_for_timeout(200)
             self.page.mouse.up()
-            self.page.wait_for_timeout(300)
+            self.page.wait_for_timeout(400)
 
     def get_items_text(self, items_locator: Locator):
         # Переконуємось, що ми отримуємо актуальні дані з DOM

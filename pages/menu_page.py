@@ -37,6 +37,8 @@ class MenuPage:
             self.page.wait_for_timeout(200)
 
     def close_submenu(self):
-        """Закриває всі підменю через hover на інший елемент меню"""
-        self.main_item_1.hover()
+        """Закриває всі підменю через очищення inline style, встановленого hover_chain()"""
+        self.page.evaluate("""
+            document.querySelectorAll('#nav ul').forEach(ul => ul.style.display = '');
+        """)
         self.page.wait_for_timeout(200)
